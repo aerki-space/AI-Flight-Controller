@@ -15,7 +15,7 @@ flowchart LR
   MCU <-->|"UART, MAVLink 2<br/>(fallback link)"| JET
   MCU <-->|"CAN1 FD (DroneCAN)"| BUS1["GNSS + compass, radar,<br/>battery monitor, airspeed"]
   MCU <-->|"CAN2 FD (DroneCAN)"| BUS2["ESCs (and redundant<br/>sensors)"]
-  MCU <-->|"UART, CRSF"| ELRS["Onboard nano ExpressLRS<br/>receiver (2.4 GHz)"]
+  MCU <-->|"UART, CRSF"| ELRS["Onboard nano ExpressLRS receiver<br/>(dual-band, true diversity)"]
   MCU --- TLM["Telemetry radio"]
   MCU --- PWM["8 x PWM / DShot<br/>(direct ESCs, servos)"]
 ```
@@ -70,10 +70,10 @@ Its design lives in the companion repository `aerkii/ELRS`.
 
 | | Plan |
 |---|---|
-| Radio | 2.4 GHz, Semtech SX128x-class LoRa/FLRC transceiver; dual-band (900 MHz + 2.4 GHz) as an option |
+| Radio | Two Semtech LR1121 dual-band transceivers (900 MHz + 2.4 GHz) in true diversity, each with its own antenna |
 | Receiver MCU | ESP-class microcontroller running ExpressLRS firmware |
 | Link to the flight controller | CRSF on an internal UART, giving RC channels and link statistics, with telemetry back to the transmitter |
-| Antenna | u.FL connector for an external dipole or T-antenna, routed clear of the carbon frame |
+| Antennas | Two u.FL connectors for dual-band antennas, led to opposite arms of the frame |
 | Firmware updates | Over Wi-Fi, or passthrough via the flight controller |
 | Power | Its own 3.3 V regulator, kept off the sensor supply |
 | Layout | A separate corner of the board, with a ground keep-out and shielding can, away from the IMUs and the CAN transceivers |

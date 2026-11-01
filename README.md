@@ -12,7 +12,7 @@ peripheral ecosystem.
 |---|---|
 | Processor | STM32H7 (Cortex-M7, 480 MHz); custom SoC planned for future revisions |
 | Sensors | Dual redundant IMUs, barometer |
-| RC link | Integrated nano ExpressLRS receiver (2.4 GHz) |
+| RC link | Integrated nano ExpressLRS receiver: dual-band (900 MHz + 2.4 GHz), true diversity, telemetry |
 | AI companion | NVIDIA Jetson Orin Nano Super, via Ethernet and UART |
 | Peripherals | DroneCAN over CAN FD (2 buses) |
 | Firmware | ArduPilot (primary), PX4 |
