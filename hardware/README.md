@@ -19,7 +19,8 @@ No schematic or layout yet. This is the starting outline.
 | Ethernet (Jetson) | 1 | 4-pin |
 | Telemetry / companion UART | 2 | 6-pin with flow control |
 | GNSS (UART + I2C) | 1 | 10-pin, for non-CAN GNSS modules |
-| RC input | 1 | CRSF / SBUS |
+| RC input | 1 | External CRSF / SBUS receiver (when the onboard ExpressLRS receiver is not fitted) |
+| ELRS antenna | 1 | u.FL, for the onboard ExpressLRS receiver |
 | Motor / servo outputs | 8 | PWM / DShot, plus ESC telemetry input |
 | Power in | 1 | 2S – 6S, with an analog voltage/current sense option |
 | Jetson 5 V out | 1 | High-current, separate from the peripheral 5 V |
@@ -32,6 +33,7 @@ No schematic or layout yet. This is the starting outline.
 2S–6S battery
  ├─ buck → 5 V (≥ 3 A)  → peripherals (CAN, GNSS, RC, telemetry)
  │                       → LDO → 3.3 V → MCU, sensors (separate low-noise LDO for the IMUs)
+ │                       → LDO → 3.3 V → onboard ExpressLRS receiver (separate rail)
  ├─ buck → 5 V (≥ 6 A)  → Jetson connector (separate, protected)
  └─ USB 5 V (bench)     → MCU and sensors only (diode-OR)
 ```

@@ -15,7 +15,8 @@ flowchart LR
   MCU <-->|"UART, MAVLink 2<br/>(fallback link)"| JET
   MCU <-->|"CAN1 FD (DroneCAN)"| BUS1["GNSS + compass, radar,<br/>battery monitor, airspeed"]
   MCU <-->|"CAN2 FD (DroneCAN)"| BUS2["ESCs (and redundant<br/>sensors)"]
-  MCU --- RC["RC receiver, telemetry radio"]
+  MCU <-->|"UART, CRSF"| ELRS["Onboard nano ExpressLRS<br/>receiver (2.4 GHz)"]
+  MCU --- TLM["Telemetry radio"]
   MCU --- PWM["8 x PWM / DShot<br/>(direct ESCs, servos)"]
 ```
 
@@ -51,7 +52,8 @@ The H753 adds a crypto/hash accelerator, useful for secure boot and signed firmw
 | FDCAN2 | DroneCAN bus 2: ESCs, redundant sensors |
 | ETH (RMII) | Jetson link: MAVLink and/or DDS (ROS 2) |
 | UART × 2 | Jetson fallback link; telemetry radio |
-| UART × 2 | RC receiver (CRSF / SBUS); spare GNSS |
+| UART (internal) | Onboard ExpressLRS receiver (CRSF) |
+| UART × 2 | External RC receiver (CRSF / SBUS) when the onboard one is not fitted; spare GNSS |
 | UART × 2 | Spare (ESC telemetry, rangefinder, ADS-B) |
 | SPI1 / SPI2 | IMU 1 / IMU 2 |
 | SPI3 or I2C | Barometer |
@@ -60,6 +62,31 @@ The H753 adds a crypto/hash accelerator, useful for secure boot and signed firmw
 | TIM | 8 × PWM / DShot outputs |
 | ADC | Analog battery voltage / current (fallback to the DroneCAN monitor) |
 | USB | Configuration, firmware updates, MAVLink |
+
+## RC link: onboard nano ExpressLRS receiver
+
+A nano-class ExpressLRS receiver is built onto the board, so most builds need no separate receiver or extra wiring.
+Its design lives in the companion repository `aerkii/ELRS`.
+
+| | Plan |
+|---|---|
+| Radio | 2.4 GHz, Semtech SX128x-class LoRa/FLRC transceiver; dual-band (900 MHz + 2.4 GHz) as an option |
+| Receiver MCU | ESP-class microcontroller running ExpressLRS firmware |
+| Link to the flight controller | CRSF on an internal UART, giving RC channels and link statistics, with telemetry back to the transmitter |
+| Antenna | u.FL connector for an external dipole or T-antenna, routed clear of the carbon frame |
+| Firmware updates | Over Wi-Fi, or passthrough via the flight controller |
+| Power | Its own 3.3 V regulator, kept off the sensor supply |
+| Layout | A separate corner of the board, with a ground keep-out and shielding can, away from the IMUs and the CAN transceivers |
+
+The receiver can be left unpopulated. The external RC connector then takes any CRSF or SBUS receiver.
+
+## Processor roadmap
+
+This revision uses the STM32H7 so that it runs today's ArduPilot and PX4 unchanged. Future revisions are planned
+around a custom SoC. To keep that path open:
+- keep board-specific code inside the flight stacks' hardware abstraction layers;
+- define the interfaces (DroneCAN, Ethernet/MAVLink/DDS, CRSF) by protocol, not by STM32 peripherals;
+- keep the connector pinouts and the mechanical outline stable across revisions.
 
 ## Power
 

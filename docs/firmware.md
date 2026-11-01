@@ -7,6 +7,7 @@
 | STM32H7 support | Mature, many boards | Mature (FMUv6 family) | Yes, for several H7 targets | Full control, everything from scratch |
 | DroneCAN | Native, including CAN FD | Native (and Cyphal) | Limited / recent; verify for each device type | Write it yourself (libcanard) |
 | Companion / AI link | MAVLink over UART or Ethernet, DDS (ROS 2), Lua scripting | MAVLink, uXRCE-DDS (ROS 2), offboard mode | Basic MAVLink only | Whatever you build |
+| ExpressLRS / CRSF | Supported (CRSF RC input and telemetry) | Supported (CRSF RC input and telemetry) | Supported | Write it yourself |
 | Autonomy features | Missions, guided mode, avoidance, terrain, precision landing | Missions, offboard, avoidance interfaces | Navigation for hobby flight | None out of the box |
 | Porting effort | Low: one board definition (`hwdef.dat`) | Medium: board directory, NuttX config | Low to medium: target files | Very high |
 | Licence | GPLv3 | BSD-3 | GPLv3 | Your choice |
