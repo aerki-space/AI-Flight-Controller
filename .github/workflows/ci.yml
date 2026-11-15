@@ -1,0 +1,22 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r tools/requirements.txt
+      - run: python -m unittest discover -s tests -v
+      - name: Planning tools
+        run: |
+          python3 tools/can_bus_load.py
+          python3 tools/power_budget.py
+      - name: Figures build
+        run: python3 tools/plot_figures.py

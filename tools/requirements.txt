@@ -1,1 +1,3 @@
 dronecan
+numpy
+matplotlib
